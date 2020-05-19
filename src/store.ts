@@ -1,6 +1,7 @@
 import { storeConfig } from './config.ts';
 
-interface Tweet {
+export interface Tweet {
+  
   created_at: string,
   id_str: string,
   [key: string]: any
