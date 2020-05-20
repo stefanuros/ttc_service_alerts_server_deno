@@ -41,6 +41,8 @@ export class Store {
         await Store.twitterApi.get("statuses/user_timeline.json", options);
       let tweetJson: Tweet[] = await ttcTweetsPromise.json();
 
+      tweetJson = tweetJson.map(Store.stripTweet);
+
       let keepTweets: number = 
         Math.min(Store.tweets.length, Store.maxStored - tweetJson.length);
 
@@ -79,5 +81,11 @@ export class Store {
     }
 
     return Store.getTweets(c);
+  }
+
+  // This function will strip all unecessary tweet data
+  private static stripTweet(tweet: Tweet): Tweet {
+    let { id_str, full_text, created_at } = tweet;
+    return { id_str, full_text, created_at };
   }
 }
