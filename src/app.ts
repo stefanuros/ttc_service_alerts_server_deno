@@ -6,7 +6,8 @@ import { Store } from './store.ts';
 // Get the tweets initially
 Store.updateTweets();
 
-// Create a new cron job
+// Create a new cron job to update Store
+console.log("Starting Cron Scheduler")
 let cron = new Cron();
 cron.start();
 cron.add("* * * * *", Store.updateTweets);
