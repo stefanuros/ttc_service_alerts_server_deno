@@ -35,23 +35,28 @@ export class Store {
       options.since_id = Store.mostRecentId;
     }
 
-    // Get tweets from api
-    let ttcTweetsPromise: Response = 
-      await Store.twitterApi.get("statuses/user_timeline.json", options);
-    let tweetJson: Tweet[] = await ttcTweetsPromise.json();
+    try {
+      // Get tweets from api
+      let ttcTweetsPromise: Response = 
+        await Store.twitterApi.get("statuses/user_timeline.json", options);
+      let tweetJson: Tweet[] = await ttcTweetsPromise.json();
 
-    let keepTweets: number = 
-      Math.min(Store.tweets.length, Store.maxStored - tweetJson.length);
+      let keepTweets: number = 
+        Math.min(Store.tweets.length, Store.maxStored - tweetJson.length);
 
-    // Add them to front of list and remove extra
-    Store.tweets = [
-      ...tweetJson,
-      ...Store.tweets.slice(0, keepTweets)
-    ];
+      // Add them to front of list and remove extra
+      Store.tweets = [
+        ...tweetJson,
+        ...Store.tweets.slice(0, keepTweets)
+      ];
 
-    // Set the new most recent
-    if(tweetJson[0] != null) {
-      Store.mostRecentId = tweetJson[0].id_str;
+      // Set the new most recent
+      if(tweetJson[0] != null) {
+        Store.mostRecentId = tweetJson[0].id_str;
+      }
+    }
+    catch(e) {
+      console.log(e);
     }
   }
 
